@@ -33,14 +33,15 @@ public class SQLWorker {
         }
     }
 
-    public static void executeUpdate(String query) {
+    public static boolean executeUpdate(String query) {
         try {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
+            return true;
         } catch (SQLException e) {
             Utils.log("[ModernTour] Error while connecting executing a command: " + query + ". Error: " + e.getMessage());
+            return false;
         }
-
     }
 
     public static ResultSet executeQuery(String query) {
@@ -60,7 +61,8 @@ public class SQLWorker {
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `uuid` VARCHAR(36) NOT NULL,
                 `role` VARCHAR(10) NOT NULL,
-                PRIMARY KEY (`id`) USING BTREE
+                PRIMARY KEY (`id`) USING BTREE,
+                UNIQUE KEY `uuid_role_uniq` (`uuid`, `role`)
                 )
                 COLLATE='utf8mb4_general_ci' ENGINE=InnoDB;""");
     }
