@@ -9,7 +9,7 @@
     <version>1.0</version>
 
     <name>ModernTour</name>
-    <description>A plugin for modern detouring players on the server.</description>
+    <description>A modern plugin for detouring players</description>
 
     <repositories>
         <repository>

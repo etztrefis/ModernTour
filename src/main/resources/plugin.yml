@@ -4,7 +4,12 @@ description: ${description}
 main: ${mainClass}
 author: trefis
 api-version: 1.17
+
 commands:
   tour:
     usage: /tour <action>
     description: Tour management.
+
+permissions:
+  tour.admin:
+    default: op
