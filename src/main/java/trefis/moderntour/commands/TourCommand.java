@@ -1,7 +1,6 @@
 package trefis.moderntour.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -23,7 +22,7 @@ public class TourCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("This command must be run on behalf of the player.");
+            sender.sendMessage("&6[ModernTour] This command must be run on behalf of the player.");
             return true;
         }
 
@@ -39,6 +38,13 @@ public class TourCommand implements TabExecutor {
                         TourHelpCommand.executeCommandWithPermission(player, plugin);
                     } else {
                         TourHelpCommand.executeCommandWithoutPermission(player, plugin);
+                    }
+                    break;
+                case "party":
+                    if (player.hasPermission("tour.admin")) {
+                        TourPartyCommand.executeCommand(player, plugin, args);
+                    } else {
+                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
                     }
                     break;
                 default:

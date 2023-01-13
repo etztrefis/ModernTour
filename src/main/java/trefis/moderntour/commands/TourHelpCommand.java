@@ -11,7 +11,7 @@ import trefis.moderntour.Utils;
 
 public class TourHelpCommand {
     public static boolean executeCommandWithPermission(Player player, Main plugin) {
-        Utils.sendMessage(player, "&6[ModernTour]&r Available commands: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r | &astart&r | &astop&r | &anext&r | &aadd <name>&r | &aremove <name>&r");
+        Utils.sendMessage(player, "&6[ModernTour]&r Available commands: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r | &astart&r | &astop&r | &anext&r | &aparty&r | &aremove <name>&r");
         if (!plugin.partyOwner.equals(player.getName())) {
             return true;
         }
