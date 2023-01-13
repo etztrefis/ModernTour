@@ -1,0 +1,10 @@
+# The database connection
+database: "jdbc:mysql://host:port/database"
+# The username
+user: ""
+# The password
+password: ""
+
+autoCreativeTourOwner: true
+displayJoinMessage: true
+isTourStarted: true
