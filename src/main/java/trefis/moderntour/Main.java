@@ -51,11 +51,7 @@ public class Main extends JavaPlugin {
         if (this.isTourStarted) {
             this.getConfig().set("isTourStarted", true);
             this.getConfig().set("partyOwner", this.partyOwner);
-            try {
-                this.getConfig().save(this.getFile());
-            } catch (IOException e) {
-                Utils.log("&c[ModernTour] Error: Unable to save config.");
-            }
+            saveConfig();
         }
         Utils.log("[ModernTour] Disabled.");
         super.onDisable();
