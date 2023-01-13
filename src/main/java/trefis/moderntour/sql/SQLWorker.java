@@ -5,12 +5,13 @@ import trefis.moderntour.Main;
 
 import java.sql.*;
 import java.util.Properties;
+import trefis.moderntour.Utils;
 
 
 public class SQLWorker {
     public static Connection connection;
 
-    public static boolean getConnection(Main plugin, String jdbc, String user, String password) {
+    public static boolean getConnection(String jdbc, String user, String password) {
         try {
             Properties properties = new Properties();
             properties.setProperty("user", user);
@@ -22,12 +23,12 @@ public class SQLWorker {
 
             connection = DriverManager.getConnection(jdbc, properties);
             if(connection != null){
-                plugin.log("&a[ModernTour] Successfully connected to a database.");
+                Utils.log("&a[ModernTour] Successfully connected to a database.");
             }
             initializeTable();
             return true;
         } catch (Exception e) {
-            plugin.log("&c[ModernTour] Unable to connect to a database. Error: " + e.getMessage());
+            Utils.log("&c[ModernTour] Unable to connect to a database. Error: " + e.getMessage());
             return false;
         }
     }
@@ -37,7 +38,7 @@ public class SQLWorker {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
         } catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("[ModernTour] Error while connecting executing a command: " + query + ". Error: " + e.getMessage());
+            Utils.log("[ModernTour] Error while connecting executing a command: " + query + ". Error: " + e.getMessage());
         }
 
     }
@@ -48,7 +49,7 @@ public class SQLWorker {
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
-            Bukkit.getConsoleSender().sendMessage("[ModernTour] Error while connecting executing a command: " + query + ". Error: " + e.getMessage());
+            Utils.log("[ModernTour] Error while connecting executing a command: " + query + ". Error: " + e.getMessage());
         }
         return resultSet;
     }
@@ -69,7 +70,7 @@ public class SQLWorker {
             try {
                 connection.close();
             } catch (SQLException e) {
-                Bukkit.getConsoleSender().sendMessage("§c[ModernTour] Error while closing a database connection. " + "Error: " + e.getMessage());
+                Utils.log("§c[ModernTour] Error while closing a database connection. " + "Error: " + e.getMessage());
             }
         }
 

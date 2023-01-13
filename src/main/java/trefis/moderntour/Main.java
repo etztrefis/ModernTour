@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import trefis.moderntour.sql.SQLWorker;
+import trefis.moderntour.Utils;
 
 import java.io.IOException;
 
@@ -18,13 +19,13 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         PluginDescriptionFile pdf = this.getDescription();
 
-        log("");
-        log("&6░█▀▄▀█ █▀▀█ █▀▀▄ █▀▀ █▀▀█ █▀▀▄ ▀▀█▀▀ █▀▀█ █──█ █▀▀█");
-        log("&6░█░█░█ █──█ █──█ █▀▀ █▄▄▀ █──█ ─░█── █──█ █──█ █▄▄▀");
-        log("&6░█──░█ ▀▀▀▀ ▀▀▀─ ▀▀▀ ▀─▀▀ ▀──▀ ─░█── ▀▀▀▀ ─▀▀▀ ▀─▀▀");
-        log("");
-        log("&aMade with &c<3 &aby &6trefis &bv." + pdf.getVersion());
-        log("");
+        Utils.log("");
+        Utils.log("&6░█▀▄▀█ █▀▀█ █▀▀▄ █▀▀ █▀▀█ █▀▀▄ ▀▀█▀▀ █▀▀█ █──█ █▀▀█");
+        Utils.log("&6░█░█░█ █──█ █──█ █▀▀ █▄▄▀ █──█ ─░█── █──█ █──█ █▄▄▀");
+        Utils.log("&6░█──░█ ▀▀▀▀ ▀▀▀─ ▀▀▀ ▀─▀▀ ▀──▀ ─░█── ▀▀▀▀ ─▀▀▀ ▀─▀▀");
+        Utils.log("");
+        Utils.log("&aMade with &c<3 &aby &6trefis &bv." + pdf.getVersion());
+        Utils.log("");
 
         loadConfigVariables();
         initializeDatabase();
@@ -38,15 +39,11 @@ public class Main extends JavaPlugin {
             try {
                 this.getConfig().save(this.getFile());
             } catch (IOException e) {
-                this.log("&c[ModernTour] Error: Unable to save config.");
+                Utils.log("&c[ModernTour] Error: Unable to save config.");
             }
         }
-        log("[ModernTour] Disabled.");
+        Utils.log("[ModernTour] Disabled.");
         super.onDisable();
-    }
-
-    public void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(message.replace("&", "§"));
     }
 
     public void loadConfigVariables() {
@@ -67,11 +64,11 @@ public class Main extends JavaPlugin {
         String password = this.getConfig().getString("password");
 
         if (database == null || user == null || password == null) {
-            this.log("&c[ModernTour] Error: Cannot connect to a database. Check you config.yml. Plugin will be disabled.");
+            Utils.log("&c[ModernTour] Error: Cannot connect to a database. Check you config.yml. Plugin will be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
-        if (!SQLWorker.getConnection(this, database, user, password)) {
-            this.log("&c[ModernTour] Error: Unable to connect to a database. Check you config.yml. Plugin will be disabled.");
+        if (!SQLWorker.getConnection(database, user, password)) {
+            Utils.log("&c[ModernTour] Error: Unable to connect to a database. Check you config.yml. Plugin will be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
     }
