@@ -2,6 +2,7 @@ package trefis.moderntour;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class Utils {
 
@@ -18,7 +19,12 @@ public class Utils {
             player.sendTitle(title, message, 10, 40, 10);
         });
     }
+
     public static void log(String message) {
         Bukkit.getConsoleSender().sendMessage(message.replace("&", "§"));
+    }
+
+    public static void sendMessage(Player player, String message) {
+        player.sendMessage(message.replace("&", "§"));
     }
 }

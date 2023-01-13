@@ -3,12 +3,14 @@ package trefis.moderntour;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import trefis.moderntour.commands.TourCommand;
 import trefis.moderntour.sql.Database;
 import trefis.moderntour.sql.SQLWorker;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -18,23 +20,30 @@ public class Main extends JavaPlugin {
     public boolean autoCreativeTourOwner = true;
     public String partyOwner = "";
     public List<UUID> party = new ArrayList<>();
+    public String version;
+    public String description;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         PluginDescriptionFile pdf = this.getDescription();
+        this.version = pdf.getVersion();
+        this.description = pdf.getDescription();
 
         Utils.log("");
         Utils.log("&6░█▀▄▀█ █▀▀█ █▀▀▄ █▀▀ █▀▀█ █▀▀▄ ▀▀█▀▀ █▀▀█ █──█ █▀▀█");
         Utils.log("&6░█░█░█ █──█ █──█ █▀▀ █▄▄▀ █──█ ─░█── █──█ █──█ █▄▄▀");
         Utils.log("&6░█──░█ ▀▀▀▀ ▀▀▀─ ▀▀▀ ▀─▀▀ ▀──▀ ─░█── ▀▀▀▀ ─▀▀▀ ▀─▀▀");
         Utils.log("");
-        Utils.log("&aMade with &c<3 &aby &6trefis &bv." + pdf.getVersion());
+        Utils.log("&aMade with &c<3 &aby &6trefis &bv." + this.version);
         Utils.log("");
 
         loadConfigVariables();
         initializeDatabase();
         loadParty();
+
+        Optional.ofNullable(getCommand("tour"))
+                .ifPresent(c -> c.setExecutor(new TourCommand(this)));
     }
 
     @Override
