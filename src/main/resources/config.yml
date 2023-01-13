@@ -8,3 +8,5 @@ password: ""
 autoCreativeTourOwner: true
 displayJoinMessage: true
 isTourStarted: true
+
+partyOwner: ""

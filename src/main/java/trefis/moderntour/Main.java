@@ -3,16 +3,21 @@ package trefis.moderntour;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import trefis.moderntour.sql.Database;
 import trefis.moderntour.sql.SQLWorker;
-import trefis.moderntour.Utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 public class Main extends JavaPlugin {
     public boolean isTourStarted = false;
     public boolean displayJoinMessage = true;
     public boolean autoCreativeTourOwner = true;
+    public String partyOwner = "";
+    public List<UUID> party = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -29,13 +34,14 @@ public class Main extends JavaPlugin {
 
         loadConfigVariables();
         initializeDatabase();
+        loadParty();
     }
 
     @Override
     public void onDisable() {
         if (this.isTourStarted) {
             this.getConfig().set("isTourStarted", true);
-
+            this.getConfig().set("partyOwner", this.partyOwner);
             try {
                 this.getConfig().save(this.getFile());
             } catch (IOException e) {
@@ -46,9 +52,10 @@ public class Main extends JavaPlugin {
         super.onDisable();
     }
 
-    public void loadConfigVariables() {
+    private void loadConfigVariables() {
         if (this.getConfig().contains("isTourStarted")) {
             this.isTourStarted = this.getConfig().getBoolean("isTourStarted");
+            this.partyOwner = this.getConfig().getString("partyOwner");
         }
         if (this.getConfig().contains("displayJoinMessage")) {
             this.displayJoinMessage = this.getConfig().getBoolean("displayJoinMessage");
@@ -58,7 +65,7 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public void initializeDatabase() {
+    private void initializeDatabase() {
         String database = this.getConfig().getString("database");
         String user = this.getConfig().getString("user");
         String password = this.getConfig().getString("password");
@@ -71,5 +78,9 @@ public class Main extends JavaPlugin {
             Utils.log("&c[ModernTour] Error: Unable to connect to a database. Check you config.yml. Plugin will be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+    }
+
+    private void loadParty() {
+        this.party.addAll(Database.request.getParty());
     }
 }
