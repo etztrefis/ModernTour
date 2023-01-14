@@ -47,6 +47,12 @@ public class TourCommand implements TabExecutor {
                         Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
                     }
                     break;
+                case "join":
+                    TourJoinCommand.executeCommand(player, plugin);
+                    break;
+                case "leave":
+                    TourLeaveCommand.executeCommand(player, plugin);
+                    break;
                 default:
                     if (sender.hasPermission("sc.admin")) {
                         sender.sendMessage("/sc [show/rise/logs/players]");
