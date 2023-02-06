@@ -22,6 +22,7 @@ public class Main extends JavaPlugin {
     public List<UUID> party = new ArrayList<>();
     public String version;
     public String description;
+    public UUID currentPlayer;
 
     @Override
     public void onEnable() {
