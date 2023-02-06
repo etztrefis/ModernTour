@@ -9,7 +9,7 @@
     <version>1.0</version>
 
     <name>ModernTour</name>
-    <description>A modern plugin for detouring players</description>
+    <description>A modern plugin for touring players</description>
 
     <repositories>
         <repository>
