@@ -1,12 +1,18 @@
 package trefis.moderntour.commands;
 
-import org.bukkit.Bukkit;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.util.Vector;
 import trefis.moderntour.Main;
 import trefis.moderntour.Utils;
+import trefis.moderntour.sql.SQLWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,22 @@ public class TourCommand implements TabExecutor {
                 case "leave":
                     TourLeaveCommand.executeCommand(player, plugin);
                     break;
+                case "next":
+                    if (player.hasPermission("tour.admin")) {
+                        TourNextCommand.executeCommand(player, plugin);
+                    } else {
+                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                    }
+                    break;
+                case "list":
+                    TourListCommand.executeCommand(player, plugin);
+                    break;
+                case "stop":
+                    if (player.hasPermission("tour.admin")) {
+                        TourStopCommand.executeCommand(player, plugin);
+                    } else {
+                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                    }
                 default:
                     if (sender.hasPermission("sc.admin")) {
                         sender.sendMessage("/sc [show/rise/logs/players]");

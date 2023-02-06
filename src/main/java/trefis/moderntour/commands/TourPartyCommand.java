@@ -78,10 +78,10 @@ public class TourPartyCommand {
                                 if(offlinePartyPlayer.getName() == null){
                                     continue;
                                 }
-                                nickname = "&6" + offlinePartyPlayer.getName() + " &c[OFFLINE]";
+                                nickname = "&c" + offlinePartyPlayer.getName();
                                 break;
                             }
-                            nickname = "&6" + partyPlayer.getName() + " &a[ONLINE]";
+                            nickname = "&a" + partyPlayer.getName();
                             break;
                         }
                         nicknames.add(nickname);
