@@ -7,6 +7,6 @@ password: ""
 
 autoCreativeTourOwner: true
 displayJoinMessage: true
-isTourStarted: true
+isTourStarted: false
 
 partyOwner: ""
