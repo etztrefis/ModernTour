@@ -50,9 +50,6 @@ public class Utils {
                 fw.setFireworkMeta(fwm);
             }
         }
-        plugin.isTourStarted = false;
-        plugin.getConfig().set("isTourStarted", false);
-        plugin.saveConfig();
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(plugin.partyOwner);
         if(offlinePlayer.isOnline()){
@@ -60,7 +57,14 @@ public class Utils {
             if(offlinePlayer.getName().equals(plugin.partyOwner));
             p.sendTitle("", "§6 The tour is over!", 10, 40, 10);
         }
-        Utils.broadcast(" \n &6" + "The tour is over! " + "\n ");
+
+        plugin.isTourStarted = false;
+        plugin.partyOwner = "";
+        plugin.getConfig().set("isTourStarted", false);
+        plugin.getConfig().set("partyOwner", "");
+        plugin.saveConfig();
+
+        Utils.broadcast(" \n&6" + "The tour is over! " + "\n ");
         SQLWorker.executeUpdate("TRUNCATE mt_data");
     }
 }
