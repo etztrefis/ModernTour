@@ -61,7 +61,7 @@ public class Database {
 
     public void tourAddPlayer(UUID uuid) {
         try {
-            SQLWorker.executeQuery("INSERT INTO mt_data (uuid) VALUES ('" + uuid + "')");
+            SQLWorker.executeUpdate("INSERT INTO mt_data (uuid) VALUES ('" + uuid + "')");
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to execute tourAddPlayer request. Error: " + e.getMessage());
         }
@@ -93,7 +93,7 @@ public class Database {
 
     public void setTourPlayerRole(UUID uuid, String role) {
         try {
-            SQLWorker.executeQuery("UPDATE mt_data SET role='" + role + "' WHERE uuid = '" + uuid + "' AND role='queue'");
+            SQLWorker.executeQuery("UPDATE mt_data SET role='" + role + "' WHERE uuid = '" + uuid + "'");
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to execute setTourPlayerRole request. Error: " + e.getMessage());
         }
@@ -104,7 +104,7 @@ public class Database {
         try{
             ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid, role FROM mt_data WHERE role!='toured'");
             if(resultSet != null){
-                while(resultSet.next()){
+                while (resultSet.next()) {
                     players.put(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("role"));
                 }
                 resultSet.close();
@@ -113,5 +113,35 @@ public class Database {
             Utils.log("&c[ModernTour] Unable to get data from ResultSet of getAllTourPlayers request. Error: " + e.getMessage());
         }
         return players;
+    }
+
+    public String getPlayerStatusInTour(UUID uuid) {
+        try {
+            ResultSet rs = SQLWorker.executeQuery("SELECT role FROM mt_data WHERE uuid = '" + uuid + "'");
+            if (rs.next()) {
+                return rs.getString("role");
+            }
+
+            rs.close();
+        } catch (Exception e) {
+            Utils.log("&c[ModernTour] Unable to get data from ResultSet of getPlayerStatusInTour request. Error: " + e.getMessage());
+        }
+        return "";
+    }
+
+    public List<UUID> getOfflinePlayers() {
+        ArrayList<UUID> uuids = new ArrayList<>();
+        ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid FROM mt_data WHERE role='left'");
+        try {
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    uuids.add(UUID.fromString(resultSet.getString(1)));
+                }
+                resultSet.close();
+            }
+        } catch (Exception e) {
+            Utils.log("&c[ModernTour] Unable to get data from ResultSet of getOfflinePlayers request. Error: " + e.getMessage());
+        }
+        return uuids;
     }
 }
