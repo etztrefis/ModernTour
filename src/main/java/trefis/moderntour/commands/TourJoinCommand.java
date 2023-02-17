@@ -16,6 +16,10 @@ public class TourJoinCommand {
             Utils.sendMessage(player, "&6[ModernTour] &cTour has not started yet.");
             return true;
         }
+        if (plugin.partyOwner.equals(player.getName())) {
+            Utils.sendMessage(player, "&6[ModernTour] &cAs a tour owner you can't join the tour :).");
+            return true;
+        }
         if (Database.request.getTouredPlayers().contains(player.getUniqueId())) {
             Utils.sendMessage(player, "&6[ModernTour] &cYou have been seen already.");
             return true;

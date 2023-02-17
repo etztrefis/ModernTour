@@ -1,18 +1,12 @@
 package trefis.moderntour.commands;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.util.Vector;
 import trefis.moderntour.Main;
 import trefis.moderntour.Utils;
-import trefis.moderntour.sql.SQLWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,11 +69,19 @@ public class TourCommand implements TabExecutor {
                     } else {
                         Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
                     }
-                default:
-                    if (sender.hasPermission("sc.admin")) {
-                        sender.sendMessage("/sc [show/rise/logs/players]");
+                    break;
+                case "start":
+                    if (player.hasPermission("tour.admin")) {
+                        TourStartCommand.executeCommand(player, plugin);
                     } else {
-                        sender.sendMessage("Правильное использование команды: /sc show");
+                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                    }
+                    break;
+                default:
+                    if (player.hasPermission("tour.admin")) {
+                        TourHelpCommand.executeCommandWithPermission(player, plugin);
+                    } else {
+                        TourHelpCommand.executeCommandWithoutPermission(player, plugin);
                     }
             }
         }
@@ -89,75 +91,33 @@ public class TourCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         List<String> subArguments = new ArrayList<>();
-        if (!commandSender.hasPermission("sc.admin")) {
+        if (!commandSender.hasPermission("tour.admin")) {
             if (strings.length == 1) {
-                subArguments.add("show");
+                subArguments.add("join");
+                subArguments.add("leave");
+                subArguments.add("help");
+                subArguments.add("list");
             }
             return subArguments;
         } else {
             if (strings.length == 1) {
-                subArguments.add("get");
-                subArguments.add("show");
-                subArguments.add("logs");
-                subArguments.add("rise");
+                subArguments.add("start");
+                subArguments.add("stop");
+                subArguments.add("party");
+                subArguments.add("next");
+                subArguments.add("join");
+                subArguments.add("leave");
+                subArguments.add("help");
+                subArguments.add("list");
                 return subArguments;
             }
-            if (strings[0].equals("rise")) {
+            if (strings[0].equals("party")) {
                 if (strings.length == 2) {
-                    List<String> playerNames = new ArrayList<>();
-                    playerNames.add("user:");
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        playerNames.add("user:" + player.getName().toLowerCase(Locale.ROOT));
-                    }
-                    return playerNames;
-                } else if (strings.length == 3) {
-                    List<String> amounts = new ArrayList<>();
-                    amounts.add("amount:");
-                    return amounts;
-                } else if (strings.length == 4) {
-                    List<String> reasons = new ArrayList<>();
-                    reasons.add("reason:");
-                    return reasons;
-                } else {
-                    return null;
-                }
-            } else if (strings[0].equals("show")) {
-                if (strings.length == 2) {
-                    List<String> playerNames = new ArrayList<>();
-                    playerNames.add("user:");
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        playerNames.add("user:" + player.getName().toLowerCase(Locale.ROOT));
-                    }
-                    return playerNames;
-                } else {
-                    return null;
-                }
-            } else if (strings[0].equals("logs")) {
-                if (strings.length == 2) {
-                    List<String> playerNames = new ArrayList<>();
-                    playerNames.add("user:");
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        playerNames.add("user:" + player.getName().toLowerCase(Locale.ROOT));
-                    }
-                    return playerNames;
-                } else if (strings.length == 3) {
-                    List<String> pages = new ArrayList<>();
-                    pages.add("page:");
-                    return pages;
-                } else {
-                    return null;
-                }
-            } else if (strings[0].equals("get")) {
-                if (strings.length == 2) {
-                    List<String> filers = new ArrayList<>();
-                    filers.add("filter:<");
-                    filers.add("filter:>");
-                    filers.add("filter:=");
-                    filers.add("filter:>=");
-                    filers.add("filter:<=");
-                    return filers;
-                } else {
-                    return null;
+                    List<String> addictionalCommands = new ArrayList<>();
+                    addictionalCommands.add("add");
+                    addictionalCommands.add("remove");
+                    addictionalCommands.add("list");
+                    return addictionalCommands;
                 }
             }
             return null;

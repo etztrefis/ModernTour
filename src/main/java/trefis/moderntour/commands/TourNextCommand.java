@@ -19,7 +19,7 @@ public class TourNextCommand {
         }
         UUID nextPlayerUuid = Database.request.getNextQueuePlayer();
         if (nextPlayerUuid == null) {
-            //TODO: stop the plugin
+            Utils.pluginStop(plugin);
             return true;
         }
         OfflinePlayer nextPlayer = Bukkit.getOfflinePlayer(nextPlayerUuid);
