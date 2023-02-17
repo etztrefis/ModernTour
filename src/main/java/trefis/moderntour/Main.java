@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import trefis.moderntour.commands.TourCommand;
+import trefis.moderntour.events.Events;
 import trefis.moderntour.sql.Database;
 import trefis.moderntour.sql.SQLWorker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +45,7 @@ public class Main extends JavaPlugin {
 
         Optional.ofNullable(getCommand("tour"))
                 .ifPresent(c -> c.setExecutor(new TourCommand(this)));
+        getServer().getPluginManager().registerEvents(new Events(this), this);
     }
 
     @Override
