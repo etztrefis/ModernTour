@@ -16,13 +16,10 @@ import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import trefis.moderntour.Main;
 import trefis.moderntour.Utils;
 import trefis.moderntour.sql.Database;
-
-import java.util.Objects;
 
 public class Events implements Listener {
     private final Main plugin;
@@ -114,26 +111,14 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        if (plugin.isTourStarted) {
-            String role = Database.request.getPlayerStatusInTour(e.getPlayer().getUniqueId());
-            if (Objects.equals(role, "queue")) {
-                Database.request.setTourPlayerRole(e.getPlayer().getUniqueId(), "left");
-            }
-
-        }
-    }
-
-    @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (plugin.isTourStarted) {
-            if (Database.request.getOfflinePlayers().contains(p.getUniqueId())) {
-                Utils.sendMessage(p, "&6[ModernTour] Rejoined the tour.");
-                Database.request.setTourPlayerRole(p.getUniqueId(), "queue");
+            if (Database.request.getTourPlayers().contains(p.getUniqueId())) {
+                Utils.sendMessage(p, "&6[ModernTour] &aYou are still in the tour queue.");
             } else if (!plugin.partyOwner.equals(p.getName())) {
-                TextComponent textComponent = new TextComponent("§6[ModernTour] §b Tour has already begun.\n");
-                textComponent.addExtra("§a Click to join the tour ");
+                TextComponent textComponent = new TextComponent("§6[ModernTour] §bTour has already begun.\n");
+                textComponent.addExtra("§aClick to join the tour ");
 
                 TextComponent joinButton = new TextComponent("[JOIN]");
                 joinButton.addExtra(" ");

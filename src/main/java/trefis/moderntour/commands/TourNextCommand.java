@@ -1,7 +1,6 @@
 package trefis.moderntour.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import trefis.moderntour.Main;
@@ -9,21 +8,27 @@ import trefis.moderntour.Utils;
 import trefis.moderntour.sql.Database;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public class TourNextCommand {
     public static boolean executeCommand(Player player, Main plugin) {
         if (!plugin.isTourStarted) {
-            Utils.sendMessage(player, "&6[ModernTour] &cTour has not started yet.");
+            Utils.sendMessage(player, "&6[ModernTour] &cОбход еще не начался.");
             return true;
         }
-        UUID nextPlayerUuid = Database.request.getNextQueuePlayer();
-        if (nextPlayerUuid == null) {
+        LinkedHashMap<UUID, String> nextDBPlayer = Database.request.getNextQueuePlayer();
+        if (nextDBPlayer.isEmpty()) {
             Utils.pluginStop(plugin);
             return true;
         }
+        UUID nextPlayerUuid = nextDBPlayer.entrySet().iterator().next().getKey();
+        String nextPlayerCoords = nextDBPlayer.entrySet().iterator().next().getValue();
+
         OfflinePlayer nextPlayer = Bukkit.getOfflinePlayer(nextPlayerUuid);
-        Location nextPlayerLocation = nextPlayer.getPlayer().getLocation();
+        Bukkit.dispatchCommand(player, nextPlayerCoords);
+        Utils.sendMessage(player, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &a игрок(ов) остался(ось).");
+        player.sendTitle("§a Следующий игрок - ", nextPlayer.getName(), 20, 50, 10);
         plugin.currentPlayer = nextPlayerUuid;
         Database.request.setTourPlayerRole(nextPlayerUuid, "toured");
 
@@ -32,16 +37,16 @@ public class TourNextCommand {
             UUID tourMemberUUID = iterator.next();
             if (Bukkit.getOfflinePlayer(tourMemberUUID).isOnline()) {
                 Player tourMember = Bukkit.getPlayer(tourMemberUUID);
-                tourMember.teleport(nextPlayerLocation);
-                Utils.sendMessage(tourMember, "&6[ModernTour] &aNext player is &b" + nextPlayer.getName() + "&a. &b" + Database.request.getTourPlayers().size() + " &a players left.");
-                tourMember.sendTitle("&a Next player is", nextPlayer.getName(), 20, 50, 10);
+                tourMember.teleport(player.getLocation());
+                Utils.sendMessage(tourMember, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &a игрок(ов) остался(ось).");
+                tourMember.sendTitle("§a Следующий игрок - ", nextPlayer.getName(), 20, 50, 10);
             }
         }
 
         if (nextPlayer.isOnline()) {
             Player onlineTourPlayer = nextPlayer.getPlayer();
             Utils.sendMessage(onlineTourPlayer, "");
-            Utils.sendMessage(onlineTourPlayer, "&6[ModernTour] &aThe tour is on you!");
+            Utils.sendMessage(onlineTourPlayer, "&6[ModernTour] &aВы в прямом эфире!");
             Utils.sendMessage(onlineTourPlayer, "");
         }
         return true;

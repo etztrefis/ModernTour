@@ -10,36 +10,65 @@ import trefis.moderntour.Main;
 import trefis.moderntour.Utils;
 import trefis.moderntour.sql.Database;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class TourJoinCommand {
     public static boolean executeCommand(Player player, Main plugin) {
         if (!plugin.isTourStarted) {
-            Utils.sendMessage(player, "&6[ModernTour] &cTour has not started yet.");
+            Utils.sendMessage(player, "&6[ModernTour] &cОбход еще не начался.");
             return true;
         }
         if (plugin.partyOwner.equals(player.getName())) {
-            Utils.sendMessage(player, "&6[ModernTour] &cAs a tour owner you can't join the tour :).");
+            Utils.sendMessage(player, "&6[ModernTour] &cСоздатель обхода не может зайти в свой обход. :)");
             return true;
         }
         if (Database.request.getTouredPlayers().contains(player.getUniqueId())) {
-            Utils.sendMessage(player, "&6[ModernTour] &cYou have been seen already.");
+            Utils.sendMessage(player, "&6[ModernTour] &cВас уже посмотрели.");
             return true;
         }
         if (Database.request.getTourPlayers().contains(player.getUniqueId())) {
-            Utils.sendMessage(player, "&6[ModernTour] &cYou are in the tour queue already, just wait.");
+            Utils.sendMessage(player, "&6[ModernTour] &cВы уже в очереди, просто подождите. :)");
+            return true;
+        }
+        if (Database.request.getParty().contains(player.getUniqueId())) {
+            Utils.sendMessage(player, "&6[ModernTour] &Участник команды не может зайтив в обход. :)");
             return true;
         }
 
-        Database.request.tourAddPlayer(player.getUniqueId());
-        Utils.sendMessage(player, "&6[ModernTour] &aYou have just been added to the tour queue.");
-        TextComponent message = new TextComponent();
-        message.addExtra("&aGet tour queue:&r ");
+        DecimalFormat df = new DecimalFormat("##.##");
+        df.setRoundingMode(RoundingMode.DOWN);
+        String environment = player.getWorld().getEnvironment().toString();
+        String playerX = df.format(player.getLocation().getX());
+        String playerY = df.format(player.getLocation().getY());
+        String playerZ = df.format(player.getLocation().getZ());
+        String playerYaw = df.format(player.getLocation().getYaw());
+        String playerPitch = df.format(player.getLocation().getPitch());
+        String teleport = "";
+        if (player.getLocation().getWorld() != null && environment.equals("NORMAL")) {
+            teleport = "execute in minecraft:overworld run tp @s " + playerX + " " + playerY + " " + playerZ + " " + playerYaw + " " + playerPitch;
+        } else if (player.getLocation().getWorld() != null && environment.equals("NETHER")) {
+            teleport = "execute in minecraft:the_nether run tp @s " + playerX + " " + playerY + " " + playerZ + " " + playerYaw + " " + playerPitch;
+        } else if (player.getLocation().getWorld() != null && environment.equals("THE_END")) {
+            teleport = "execute in minecraft:the_end run tp @s " + playerX + " " + playerY + " " + playerZ + " " + playerYaw + " " + playerPitch;
+        }else {
+            teleport = "execute in minecraft:" + environment + "run tp @s " + playerX + " " + playerY + " " + playerZ + " " + playerYaw + " " + playerPitch;
+        }
 
-        TextComponent listButton = new TextComponent("[LIST]");
-        listButton.setColor(ChatColor.GOLD);
-        listButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tour list"));
-        listButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Tour queue").create()));
-        message.addExtra(listButton);
-        player.spigot().sendMessage(message);
+        if(Database.request.tourAddPlayer(player.getUniqueId(), teleport)){
+            Utils.sendMessage(player, "&6[ModernTour] &aВы успешно добавлены в обход.");
+            TextComponent message = new TextComponent();
+            message.addExtra("§aПосмотреть свою позицию в очереди обхода:§r ");
+
+            TextComponent listButton = new TextComponent("[LIST]");
+            listButton.setColor(ChatColor.GOLD);
+            listButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tour list"));
+            listButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Tour queue").create()));
+            message.addExtra(listButton);
+            player.spigot().sendMessage(message);
+        }else{
+            Utils.sendMessage(player, "&6[ModernTour] &aПроизошла ошибка во время добавления в обход.");
+        }
 
         return true;
     }

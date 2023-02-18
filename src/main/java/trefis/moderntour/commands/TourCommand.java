@@ -44,7 +44,7 @@ public class TourCommand implements TabExecutor {
                     if (player.hasPermission("tour.admin")) {
                         TourPartyCommand.executeCommand(player, plugin, args);
                     } else {
-                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                        Utils.sendMessage(player, "&6[ModernTour] &cУ вас недостаточно прав для выполнения данной команды.");
                     }
                     break;
                 case "join":
@@ -57,7 +57,7 @@ public class TourCommand implements TabExecutor {
                     if (player.hasPermission("tour.admin")) {
                         TourNextCommand.executeCommand(player, plugin);
                     } else {
-                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                        Utils.sendMessage(player, "&6[ModernTour] &cУ вас недостаточно прав для выполнения данной команды.");
                     }
                     break;
                 case "list":
@@ -67,14 +67,14 @@ public class TourCommand implements TabExecutor {
                     if (player.hasPermission("tour.admin")) {
                         TourStopCommand.executeCommand(player, plugin);
                     } else {
-                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                        Utils.sendMessage(player, "&6[ModernTour] &cУ вас недостаточно прав для выполнения данной команды.");
                     }
                     break;
                 case "start":
                     if (player.hasPermission("tour.admin")) {
                         TourStartCommand.executeCommand(player, plugin);
                     } else {
-                        Utils.sendMessage(player, "&6[ModernTour] &cYou don't have permission to run this command.");
+                        Utils.sendMessage(player, "&6[ModernTour] &cУ вас недостаточно прав для выполнения данной команды.");
                     }
                     break;
                 default:

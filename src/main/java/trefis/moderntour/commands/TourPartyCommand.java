@@ -25,15 +25,15 @@ public class TourPartyCommand {
                     } else {
                         Player target = Bukkit.getPlayer(args[2]);
                         if (target == null) {
-                            Utils.sendMessage(player, "&6[ModernTour] &cThis player is offline or not found.");
+                            Utils.sendMessage(player, "&6[ModernTour] &cЭтот игрок оффлайн или не найден.");
                         } else {
                             plugin.party.add(target.getUniqueId());
                             boolean response = SQLWorker.executeUpdate("INSERT INTO mt_data SET uuid = " + "\"" + target.getUniqueId() + "\"" + ", role='party'");
                             if (response) {
-                                Utils.sendMessage(player, "&6[ModernTour]&a Player &b" + target.getName() + "&a has been added to your party.");
+                                Utils.sendMessage(player, "&6[ModernTour]&a Игрок &b" + target.getName() + "&a был добавлен в вашу команду.");
                                 Utils.broadcast(" \n&aNew party member - &b" + target.getName() + "&a! \n ");
                             } else {
-                                Utils.sendMessage(player, "&6[ModernTour]&r &cError occurred. Player &b" + target.getName() + "&c is already on your party.");
+                                Utils.sendMessage(player, "&6[ModernTour]&r &cОшибка. Игрок &b" + target.getName() + "&c уже в вашей команде.");
                             }
                         }
                     }
@@ -53,13 +53,17 @@ public class TourPartyCommand {
                         plugin.party.remove(target.getUniqueId());
                         boolean response = SQLWorker.executeUpdate("DELETE FROM mt_data WHERE uuid = " + "\"" + target.getUniqueId() + "\"" + " AND role='party'");
                         if (response) {
-                            Utils.sendMessage(player, "&6[ModernTour]&a Player &b" + target.getName() + "&a has been removed from your party.");
+                            Utils.sendMessage(player, "&6[ModernTour]&a Игрок &b" + target.getName() + "&a был удален из вашей команды.");
                         }
                     }
                     break;
                 case "list":
+                    if(plugin.party.size() == 0){
+                        Utils.sendMessage(player, "&6[ModernTour] &aТы такой одинокий :(");
+                        return true;
+                    }
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("&6[ModernTour] &aTour party members: ");
+                    stringBuilder.append("&6[ModernTour] &aИгроки команды: ");
                     List<String> nicknames = new ArrayList<>();
                     Iterator<UUID> iterator = plugin.party.iterator();
 

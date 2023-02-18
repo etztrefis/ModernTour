@@ -14,15 +14,14 @@ import java.util.UUID;
 public class TourListCommand {
     public static boolean executeCommand(Player player, Main plugin) {
         if (!plugin.isTourStarted) {
-            Utils.sendMessage(player, "&6[ModernTour] &cTour has not started yet.");
+            Utils.sendMessage(player, "&6[ModernTour] &cОбход еще не начался.");
             return true;
         }
         Utils.sendMessage(player, " ");
-        Utils.sendMessage(player, "&6 Modern tour list");
-        Utils.sendMessage(player, " ");
+        Utils.sendMessage(player, "&6Modern tour list");
 
         if (Database.request.getTourPlayers().size() == 0) {
-            Utils.sendMessage(player, "&a Tour list is empty.");
+            Utils.sendMessage(player, "&aНикого нету в обходе :(.");
             return true;
         }
 
@@ -34,24 +33,23 @@ public class TourListCommand {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
             String playerName = offlinePlayer.getName();
             if (!offlinePlayer.isOnline()) {
-                textComponent.addExtra("&c[OFFLINE] &r");
+                textComponent.addExtra("§c[OFF]§r");
             }
-            if (plugin.currentPlayer.equals(offlinePlayer.getUniqueId())) {
-                textComponent.addExtra("&6→&r");
+            if (plugin.currentPlayer != null && plugin.currentPlayer.equals(offlinePlayer.getUniqueId())) {
+                textComponent.addExtra("§6→");
             } else {
                 switch (map.get(uuid)) {
                     case "queue":
-                        textComponent.addExtra("&a");
+                        textComponent.addExtra("§a" + playerName + "§r");
                         break;
                     case "party":
-                        textComponent.addExtra("&b");
+                        textComponent.addExtra("§b" + playerName + "§r");
                         break;
                     case "toured":
-                        textComponent.addExtra("&7");
+                        textComponent.addExtra("§7" + playerName + "§r");
                         break;
                 }
             }
-            textComponent.addExtra(playerName + "&r ");
             textComponent.addExtra(" ");
         }
         player.spigot().sendMessage(textComponent);

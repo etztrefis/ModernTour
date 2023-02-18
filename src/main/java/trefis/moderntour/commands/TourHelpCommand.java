@@ -11,12 +11,12 @@ import trefis.moderntour.Utils;
 
 public class TourHelpCommand {
     public static boolean executeCommandWithPermission(Player player, Main plugin) {
-        Utils.sendMessage(player, "&6[ModernTour]&r Available commands: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r | &astart&r | &astop&r | &anext&r | &aparty");
+        Utils.sendMessage(player, "&6[ModernTour]&r Доступные команды: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r | &astart&r | &astop&r | &anext&r | &aparty");
         Utils.sendMessage(player, " ");
-        Utils.sendMessage(player, "&a Modern tour management");
+        Utils.sendMessage(player, "&aModern tour management");
         Utils.sendMessage(player, " ");
 
-        TextComponent message = new TextComponent(" ");
+        TextComponent message = new TextComponent("");
 
         TextComponent startButton = new TextComponent("[START]");
         startButton.addExtra(" ");
@@ -53,7 +53,7 @@ public class TourHelpCommand {
     }
 
     public static boolean executeCommandWithoutPermission(Player player, Main plugin) {
-        Utils.sendMessage(player, "&6[ModernTour]&r Available commands: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r");
+        Utils.sendMessage(player, "&6[ModernTour]&r Доступные команды: &a/tour &r&ahelp&r | &ajoin&r | &aleave&r | &alist&r");
         return true;
     }
 }

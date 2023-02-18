@@ -19,15 +19,15 @@ import java.util.Objects;
 public class TourStartCommand {
     public static boolean executeCommand(Player player, Main plugin) {
         if (plugin.isTourStarted) {
-            Utils.sendMessage(player, "&6[ModernTour] &cTour has already started.");
+            Utils.sendMessage(player, "&6[ModernTour] &cОбход еще не начался.");
             return true;
         }
         plugin.partyOwner = player.getName();
         plugin.isTourStarted = true;
-        Utils.broadcastTitle("§6The tour has just begun", "Click the chat button to join!");
+        Utils.broadcastTitle("§6Обход запущен!", "Нажмите на кнопку в чате чтобы зайти в очередь!");
 
-        TextComponent textComponent = new TextComponent("§6[ModernTour] §b" + plugin.partyOwner + " §6just started the tour\n");
-        textComponent.addExtra("§a Click to join the tour ");
+        TextComponent textComponent = new TextComponent("§6[ModernTour] §b" + plugin.partyOwner + " §6начал обход\n");
+        textComponent.addExtra("§aНажмите чтобы зайти в очередь обхода ");
 
         TextComponent joinButton = new TextComponent("[JOIN]");
         joinButton.addExtra(" ");
