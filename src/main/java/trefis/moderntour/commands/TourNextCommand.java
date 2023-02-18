@@ -27,7 +27,7 @@ public class TourNextCommand {
 
         OfflinePlayer nextPlayer = Bukkit.getOfflinePlayer(nextPlayerUuid);
         Bukkit.dispatchCommand(player, nextPlayerCoords);
-        Utils.sendMessage(player, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &a игрок(ов) остался(ось).");
+        Utils.sendMessage(player, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &aигрок(ов) остался(ось).");
         player.sendTitle("§a Следующий игрок - ", nextPlayer.getName(), 20, 50, 10);
         plugin.currentPlayer = nextPlayerUuid;
         Database.request.setTourPlayerRole(nextPlayerUuid, "toured");
@@ -38,7 +38,7 @@ public class TourNextCommand {
             if (Bukkit.getOfflinePlayer(tourMemberUUID).isOnline()) {
                 Player tourMember = Bukkit.getPlayer(tourMemberUUID);
                 tourMember.teleport(player.getLocation());
-                Utils.sendMessage(tourMember, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &a игрок(ов) остался(ось).");
+                Utils.sendMessage(tourMember, "&6[ModernTour] &aСледующий игрок - &b" + nextPlayer.getName() + "&a.&b " + Database.request.getTourPlayers().size() + " &aигрок(ов) остался(ось).");
                 tourMember.sendTitle("§a Следующий игрок - ", nextPlayer.getName(), 20, 50, 10);
             }
         }
