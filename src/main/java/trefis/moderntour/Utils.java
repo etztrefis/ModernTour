@@ -57,7 +57,7 @@ public class Utils {
         if(offlinePlayer.isOnline()){
             Player p = Bukkit.getPlayer(plugin.partyOwner);
             if(offlinePlayer.getName().equals(plugin.partyOwner));
-            p.sendTitle("", "§6 The tour is over!", 10, 40, 10);
+            p.sendTitle("", "§6Обход закончен. Спасибо!", 10, 40, 10);
         }
 
         plugin.isTourStarted = false;
@@ -67,7 +67,7 @@ public class Utils {
         plugin.getConfig().set("partyOwner", "");
         plugin.saveConfig();
 
-        Utils.broadcast(" \n&6" + "The tour is over! " + "\n ");
+        Utils.broadcast(" \n&6" + "Обход закончен. Спасибо! " + "\n ");
         SQLWorker.executeUpdate("TRUNCATE mt_data");
     }
 }

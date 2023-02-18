@@ -27,7 +27,7 @@ public class TourStartCommand {
         Utils.broadcastTitle("§6Обход запущен!", "Нажмите на кнопку в чате чтобы зайти в очередь!");
 
         TextComponent textComponent = new TextComponent("§6[ModernTour] §b" + plugin.partyOwner + " §6начал обход\n");
-        textComponent.addExtra("§aНажмите чтобы зайти в очередь обхода ");
+        textComponent.addExtra("§aВыберете место и нажмите на кнопку чтобы зайти в очередь обхода ");
 
         TextComponent joinButton = new TextComponent("[JOIN]");
         joinButton.addExtra(" ");

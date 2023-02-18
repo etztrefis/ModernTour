@@ -57,6 +57,8 @@ public class TourJoinCommand {
 
         if(Database.request.tourAddPlayer(player.getUniqueId(), teleport)){
             Utils.sendMessage(player, "&6[ModernTour] &aВы успешно добавлены в обход.");
+            TextComponent exitMessage = new TextComponent();
+            exitMessage.addExtra("§сВнимание! Ваша позиция будет использована как точка для телепортации. Если вы хотите изменить ее - нажмите на кнопку в чате и выйдите из очереди, затем заново зайдите в обход на новых координатах §r");
             TextComponent message = new TextComponent();
             message.addExtra("§aПосмотреть свою позицию в очереди обхода:§r ");
 
@@ -65,7 +67,13 @@ public class TourJoinCommand {
             listButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tour list"));
             listButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Tour queue").create()));
             message.addExtra(listButton);
+            TextComponent exitButton = new TextComponent("[LEAVE]");
+            exitButton.setColor(ChatColor.GOLD);
+            exitButton.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tour leave"));
+            exitButton.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.RED + "Tour queue").create()));
+            exitMessage.addExtra(exitButton);
             player.spigot().sendMessage(message);
+            player.spigot().sendMessage(exitMessage);
         }else{
             Utils.sendMessage(player, "&6[ModernTour] &aПроизошла ошибка во время добавления в обход.");
         }

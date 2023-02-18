@@ -115,10 +115,10 @@ public class Events implements Listener {
         Player p = e.getPlayer();
         if (plugin.isTourStarted) {
             if (Database.request.getTourPlayers().contains(p.getUniqueId())) {
-                Utils.sendMessage(p, "&6[ModernTour] &aYou are still in the tour queue.");
+                Utils.sendMessage(p, "&6[ModernTour] &aВы все еще в очереди обхода.");
             } else if (!plugin.partyOwner.equals(p.getName())) {
-                TextComponent textComponent = new TextComponent("§6[ModernTour] §bTour has already begun.\n");
-                textComponent.addExtra("§aClick to join the tour ");
+                TextComponent textComponent = new TextComponent("§6[ModernTour] §bОбход уже начался, заходите в очередь скорее!\n");
+                textComponent.addExtra("§aНажмите чтобы зайти в очередь обхода ");
 
                 TextComponent joinButton = new TextComponent("[JOIN]");
                 joinButton.addExtra(" ");
