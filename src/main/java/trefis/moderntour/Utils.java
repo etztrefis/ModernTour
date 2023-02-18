@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 import trefis.moderntour.sql.SQLWorker;
 
+import java.util.ArrayList;
+
 public class Utils {
 
     public static void broadcast(String message) {
@@ -60,6 +62,7 @@ public class Utils {
 
         plugin.isTourStarted = false;
         plugin.partyOwner = "";
+        plugin.party = new ArrayList<>();
         plugin.getConfig().set("isTourStarted", false);
         plugin.getConfig().set("partyOwner", "");
         plugin.saveConfig();
