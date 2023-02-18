@@ -60,7 +60,8 @@ public class SQLWorker {
                 CREATE TABLE IF NOT EXISTS `mt_data` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `uuid` VARCHAR(36) NOT NULL,
-                `role` VARCHAR(10) NOT NULL,
+                `role` VARCHAR(10) DEFAULT 'queue',
+                `coords` VARCHAR(1028) NULL,
                 PRIMARY KEY (`id`) USING BTREE,
                 UNIQUE KEY `uuid_role_uniq` (`uuid`, `role`)
                 )

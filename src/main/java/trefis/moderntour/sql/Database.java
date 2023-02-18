@@ -59,41 +59,43 @@ public class Database {
         return uuids;
     }
 
-    public void tourAddPlayer(UUID uuid) {
+    public boolean tourAddPlayer(UUID uuid, String coords) {
         try {
-            SQLWorker.executeUpdate("INSERT INTO mt_data (uuid) VALUES ('" + uuid + "')");
+            SQLWorker.executeUpdate("INSERT INTO mt_data (uuid, coords) VALUES ('" + uuid + "', '" + coords + "')");
+            return true;
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to execute tourAddPlayer request. Error: " + e.getMessage());
+            return false;
         }
     }
 
     public void tourRemovePlayer(UUID uuid) {
         try {
-            SQLWorker.executeQuery("UPDATE mt_data SET role='left' WHERE uuid = '" + uuid + "' AND role='queue'");
+            SQLWorker.executeUpdate("DELETE FROM mt_data WHERE uuid = '" + uuid + "' AND role='queue'");
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to execute tourRemovePlayer request. Error: " + e.getMessage());
         }
     }
 
-    public UUID getNextQueuePlayer() {
-        UUID uuid = null;
-        ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid FROM mt_data WHERE role='queue' LIMIT 1");
+    public LinkedHashMap<UUID, String> getNextQueuePlayer() {
+        LinkedHashMap<UUID, String> player = new LinkedHashMap();
+        ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid, coords FROM mt_data WHERE role='queue' LIMIT 1");
         try {
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    uuid = UUID.fromString(resultSet.getString(1));
+                    player.put(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("coords"));
                 }
                 resultSet.close();
             }
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to get data from ResultSet of getNextQueuePlayer request. Error: " + e.getMessage());
         }
-        return uuid;
+        return player;
     }
 
     public void setTourPlayerRole(UUID uuid, String role) {
         try {
-            SQLWorker.executeQuery("UPDATE mt_data SET role='" + role + "' WHERE uuid = '" + uuid + "'");
+            SQLWorker.executeUpdate("UPDATE mt_data SET role='" + role + "' WHERE uuid = '" + uuid + "'");
         } catch (Exception e) {
             Utils.log("&c[ModernTour] Unable to execute setTourPlayerRole request. Error: " + e.getMessage());
         }
@@ -102,7 +104,7 @@ public class Database {
     public LinkedHashMap<UUID, String> getAllTourPlayers (){
         LinkedHashMap<UUID, String> players = new LinkedHashMap();
         try{
-            ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid, role FROM mt_data WHERE role!='toured'");
+            ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid, role FROM mt_data WHERE role!='party'");
             if(resultSet != null){
                 while (resultSet.next()) {
                     players.put(UUID.fromString(resultSet.getString("uuid")), resultSet.getString("role"));
@@ -127,21 +129,5 @@ public class Database {
             Utils.log("&c[ModernTour] Unable to get data from ResultSet of getPlayerStatusInTour request. Error: " + e.getMessage());
         }
         return "";
-    }
-
-    public List<UUID> getOfflinePlayers() {
-        ArrayList<UUID> uuids = new ArrayList<>();
-        ResultSet resultSet = SQLWorker.executeQuery("SELECT uuid FROM mt_data WHERE role='left'");
-        try {
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    uuids.add(UUID.fromString(resultSet.getString(1)));
-                }
-                resultSet.close();
-            }
-        } catch (Exception e) {
-            Utils.log("&c[ModernTour] Unable to get data from ResultSet of getOfflinePlayers request. Error: " + e.getMessage());
-        }
-        return uuids;
     }
 }
